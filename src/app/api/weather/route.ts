@@ -21,7 +21,6 @@ const processDailyForecast = (openWeatherData: any, weatherApiData: any) => {
         dailyData[date].pop.push(item.pop);
     });
 
-    // Ensure we have forecast data to map against
     const forecastDays = weatherApiData.forecast?.forecastday || [];
 
     return Object.values(dailyData).map((day: any, index: number) => ({
@@ -56,7 +55,8 @@ const mergeWeatherData = (weatherApiData: any, openWeatherData: any, airPollutio
                 icon: `https:${weatherApiData.current.condition.icon}`,
                 code: weatherApiData.current.condition.code
             }],
-            uv: weatherApiData.current.uv,
+            // Correctly handle potentially missing UV data at the source.
+            uv: weatherApiData.current?.uv ?? null,
             pressure_mb: weatherApiData.current.pressure_mb,
             sunrise: openWeatherData.city.sunrise,
             sunset: openWeatherData.city.sunset,
@@ -117,7 +117,6 @@ export async function GET(req: NextRequest) {
         }
 
         if (weatherApiFailed) {
-            // If OpenWeatherMap *didn't* fail, we can try a fallback
             if (!openWeatherFailed) {
                 const lat = openWeatherData.city.coord.lat;
                 const lon = openWeatherData.city.coord.lon;
@@ -128,20 +127,16 @@ export async function GET(req: NextRequest) {
                 const weatherApiRetryData = await weatherApiRetryRes.json();
 
                 if (weatherApiRetryData.error) {
-                    // Fallback also failed, so record original error
                     errors.push(`WeatherAPI Error: ${weatherApiData.error.message}`);
                 } else {
-                    // Fallback succeeded, use this data instead
                     weatherApiData = weatherApiRetryData;
-                    weatherApiFailed = false; // clear the failure flag
+                    weatherApiFailed = false;
                 }
             } else {
-                 // OpenWeatherMap failed, so we couldn't try a fallback. Just record the WeatherAPI error.
                  errors.push(`WeatherAPI Error: ${weatherApiData.error.message}`);
             }
         }
         
-        // If, after all checks, any unrecoverable errors remain, return them.
         if (errors.length > 0 || weatherApiFailed) {
              if (weatherApiFailed && !errors.some(e => e.startsWith('WeatherAPI'))) {
                 errors.push(`WeatherAPI Error: ${weatherApiData.error.message}`);

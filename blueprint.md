@@ -1,41 +1,89 @@
-# Meteoro Weather Application
+# Meteoro Weather App Blueprint
 
-## Overview
+## 1. Overview
 
-Meteoro is a modern, visually-driven weather application built with Next.js and Tailwind CSS. It provides real-time weather information, a 5-day forecast, and detailed atmospheric data in a beautiful and intuitive interface. The application's theme dynamically adapts to the current weather conditions, with a light theme for sunny days and a dark theme for all other conditions.
+Meteoro is a modern, design-focused weather application. It provides real-time weather data, multi-day forecasts, air quality information, and other meteorological details. The interface is designed to be beautiful, intuitive, and fully responsive, with a dynamic theme system that adapts to the current weather conditions.
 
-## Core Features
+## 2. Implemented Features & Design
 
-*   **Dynamic Theming:** The application's theme automatically switches between light and dark modes based on the current weather. A light theme is used for sunny or clear conditions, while a dark theme is used for cloudy, rainy, or misty weather.
-*   **"Frosted Glass" UI:** The UI features "frosted glass" cards that create a sense of depth and make the content more readable. This effect is achieved with a combination of `backdrop-blur` and semi-transparent background colors.
-*   **Dynamic Backgrounds:** The background of the application is a looping video that changes based on the weather conditions. There are videos for sunny, rainy, misty, and cloudy weather.
-*   **Geolocation and Search:** Users can either get weather information for their current location using the browser's geolocation API or search for a specific city.
-*   **Comprehensive Weather Data:** The application displays a wealth of weather information, including:
-    *   Current weather with temperature, feels-like temperature, and high/low temperatures.
-    *   Hourly and 5-day forecasts.
-    *   Air quality index.
-    *   UV index.
-    *   Sunrise and sunset times.
-    *   Wind status.
-    *   Atmospheric pressure and humidity.
-    *   Moon phase.
-    *   Weather alerts.
+This section documents all features, styles, and architectural decisions implemented in the application to date.
 
-## Design and Styling
+### 2.1. Core Architecture
+*   **Framework:** Next.js 14+ with App Router.
+*   **Language:** TypeScript.
+*   **Package Manager:** npm.
 
-*   **Typography:** The application uses a clean, modern font stack with a clear typographic hierarchy. The primary font is a sans-serif font, with different weights and sizes used to distinguish between headings, body text, and secondary information.
-*   **Color Palette:** The color palette is designed to be both aesthetically pleasing and functional. The light theme uses a light gray background with white cards and dark text, while the dark theme uses a dark background with semi-transparent dark gray cards and light text. The color palette also includes accent colors for links and other interactive elements.
-*   **Iconography:** The application uses icons from the `react-icons/fi` library to provide visual cues and enhance the user experience.
-*   **Layout:** The layout is responsive and adapts to different screen sizes. On larger screens, the content is organized in a two-column grid, while on smaller screens, the content is stacked vertically.
+### 2.2. Styling & Theming
+*   **CSS Framework:** Tailwind CSS.
+*   **Font:** Poppins.
+*   **Base Styles:** A custom theme is defined in `tailwind.config.ts` for consistent colors, spacing, and typography across light and dark modes.
+*   **Background:** A subtle `bg-noise` texture is applied over a dark base (`#121212`) for a premium feel.
+*   **Dynamic Theme:** The background color and accent elements change dynamically based on the current weather condition (`WeatherBackground` component).
+*   **Cards:** UI cards feature a modern glassmorphism effect (`shadow-glass-light`, `dark:shadow-glass-dark`, `backdrop-blur-sm`).
 
-## Project Structure
+### 2.3. Backend API (`/api/weather`)
+*   **Data Aggregation:** A single server-side route fetches data from two external sources: **WeatherAPI** and **OpenWeatherMap**.
+*   **Data Merging:** The route merges the responses to create a unified data structure, combining the strengths of both APIs.
+*   **Air Quality:** It makes a third call to fetch detailed air pollution data based on the location coordinates.
+*   **Error Handling:**
+    *   Includes a fallback mechanism: If the primary API fails on a location search, it attempts a second search using coordinates from the other API.
+    *   Returns clear error messages in a JSON object.
+    *   **Data Integrity:** Gracefully handles missing `uv` data at the source, returning `null` instead of `undefined` to prevent client-side `NaN` errors.
 
-*   **/app:** The core directory for file-based routing.
-    *   **page.tsx:** The main page component, which orchestrates the fetching of weather data and the rendering of the various weather components.
-    *   **/components:** This directory contains all the reusable UI components, such as `WeatherBackground`, `CurrentWeather`, `HourlyForecast`, etc.
-*   **tailwind.config.ts:** The Tailwind CSS configuration file, which defines the color palette, box shadows, and other design tokens.
-*   **.idx/dev.nix:** The Nix configuration file, which defines the development environment.
+### 2.4. Components
+*   **`CurrentWeather`**: Displays primary weather info: location, temperature, condition, and high/lows.
+*   **`HourlyForecast`**: A horizontally scrollable list of the weather for the next several hours.
+*   **`DailyForecastCard`**: Compact cards for the 5-day forecast.
+*   **`AirQuality`**: Shows the Air Quality Index (AQI) and breaks down individual pollutant levels.
+*   **`UvIndex`**:
+    *   Displays the UV index value with a corresponding status level (Low, Moderate, etc.).
+    *   Features a circular SVG progress indicator that visually represents the UV level.
+    *   The indicator color and text are dynamically styled using themed Tailwind classes (e.g., `text-green-500`).
+    *   Includes a smooth, theme-compliant CSS transition for the progress animation.
+    *   Displays a skeleton loader during data fetching and correctly handles `null` or invalid data.
+*   **`SunriseSunset`**: Shows sunrise and sunset times with a dynamic arc that tracks the sun's position during the day.
+*   **`WindStatus`**: Displays wind speed, gust speed, and direction with a compass-like indicator.
+*   **`Atmosphere`**: Shows humidity, pressure, and visibility.
+*   **`MoonPhase`**: Shows the current moon phase and rise/set times.
+*   **`WeatherAlerts`**: Lists any active weather alerts for the location.
+*   **`ErrorDisplay`**: A dedicated component to show API or network errors with a retry button.
 
-## Current Plan and Steps
+### 2.5. Client-Side Logic (`page.tsx`)
+*   **State Management:** Uses `useState` and `useEffect` hooks for managing location, weather data, loading status, and errors.
+*   **Data Fetching:**
+    *   Initiates a data fetch on page load using the browser's geolocation API.
+    *   Falls back to a default location ('New York') if geolocation is denied or unavailable.
+    *   Allows users to manually search for a new location.
+*   **Layout:** Currently a single-column layout, which is the subject of the current change request.
 
-This section outlines the plan and steps for the current requested change. Since the initial development is complete, this section is currently empty.
+## 3. Current Task: Modern Responsive Layout
+
+**Goal:** Rearchitect the main page layout in `src/app/page.tsx` to be more modern, visually balanced, and responsive across all screen sizes, without modifying the internal code of any component.
+
+### 3.1. Plan
+1.  **Grid System:** Replace the current single-column structure with a responsive 12-column grid.
+    *   `grid-cols-1` (Mobile)
+    *   `md:grid-cols-2` (Tablet)
+    *   `xl:grid-cols-4` (Desktop)
+2.  **Viewport Maximization:** Expand the main container to `max-w-screen-xl` to make better use of horizontal space on large monitors.
+3.  **Component Orchestration:** Rearrange the components into a more logical and visually appealing hierarchy.
+
+    *   **Row 1 (Primary Dashboard):**
+        *   `CurrentWeather`: Span `xl:col-span-2` and `md:col-span-2` to give it prominence.
+        *   `SunriseSunset`: Place next to `CurrentWeather`.
+        *   `UvIndex`: Place next to `CurrentWeather`.
+
+    *   **Row 2 (Full-Width Info):**
+        *   `HourlyForecast`: Span the full width (`xl:col-span-4`, `md:col-span-2`).
+        *   `WeatherAlerts` (if present): Span the full width (`xl:col-span-4`, `md:col-span-2`).
+
+    *   **Row 3 (Detailed Grid):**
+        *   `5-Day Forecast`: Span the full width (`xl:col-span-4`, `md:col-span-2`).
+        *   `AirQuality`: Span `xl:col-span-2` and `md:col-span-2`.
+    
+    *   **Row 4 (Secondary Grid):**
+        *   `WindStatus`
+        *   `MoonPhase`
+        *   `Atmosphere`: Span `xl:col-span-2`
+
+4.  **Responsiveness:** Ensure the layout gracefully adapts to smaller screens, stacking elements logically. Add responsive gap utilities for consistent spacing.

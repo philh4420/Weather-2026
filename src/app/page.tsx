@@ -63,11 +63,11 @@ export default function Home() {
           fetchWeatherData(initialLocation);
         },
         () => {
-          fetchWeatherData('New York');
+          fetchWeatherData('New York'); // Fallback location
         }
       );
     } else {
-      fetchWeatherData('New York');
+      fetchWeatherData('New York'); // Fallback for browsers without geolocation
     }
   }, [fetchWeatherData]);
 
@@ -100,7 +100,7 @@ export default function Home() {
     }
   };
 
-  const cardClasses = 'border border-border dark:border-dark-border bg-card dark:bg-dark-card shadow-glass-light dark:shadow-glass-dark backdrop-blur-sm';
+  const cardClasses = 'border border-border dark:border-dark-border bg-card dark:bg-dark-card shadow-glass-light dark:shadow-glass-dark backdrop-blur-sm rounded-lg p-4';
   const secondaryText = 'text-secondary-text dark:text-dark-secondary-text';
 
   return (
@@ -108,8 +108,8 @@ export default function Home() {
       {weatherData && weatherData.current && weatherData.current.weather && weatherData.current.weather[0] && errors.length === 0 && (
         <WeatherBackground weatherCondition={weatherData.current.weather[0].main} onThemeChange={handleThemeChange} />
       )}
-      <div className="relative z-10">
-        <header className="py-4 px-6 md:px-10 flex justify-between items-center">
+      <div className="relative z-10 max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8">
+        <header className="py-4 flex justify-between items-center">
           <h1 className="text-xl font-bold">Meteoro</h1>
           <div className="flex items-center space-x-2">
             <form onSubmit={handleSearch} className="relative">
@@ -117,20 +117,20 @@ export default function Home() {
                 type="text"
                 value={location}
                 onChange={(e) => setLocation(e.target.value)}
-                className={`${cardClasses} rounded-full py-2 pl-10 pr-4 focus:outline-none focus:ring-2 focus:ring-link-blue`}
+                className="bg-card/80 dark:bg-dark-card/80 border border-border dark:border-dark-border rounded-full py-2 pl-10 pr-4 focus:outline-none focus:ring-2 focus:ring-link-blue backdrop-blur-sm shadow-glass-light dark:shadow-glass-dark"
                 placeholder="Search city..."
               />
               <FiSearch className={`absolute left-3 top-1/2 -translate-y-1/2 ${secondaryText}`} />
             </form>
-            <button onClick={handleGeolocation} className={`${cardClasses} p-2 rounded-full hover:bg-opacity-80 transition-colors`}>
+            <button onClick={handleGeolocation} className="bg-card/80 dark:bg-dark-card/80 border border-border dark:border-dark-border p-2 rounded-full hover:bg-opacity-80 transition-colors backdrop-blur-sm shadow-glass-light dark:shadow-glass-dark">
               <FiMapPin className="text-link-blue" />
             </button>
           </div>
         </header>
 
-        <main className="px-6 md:px-10 pb-10">
+        <main className="pb-10">
           {loading && (
-            <div className="flex justify-center items-center h-96">
+            <div className="flex justify-center items-center h-[calc(100vh-200px)]">
               <FiLoader className={`animate-spin text-4xl ${secondaryText}`} />
             </div>
           )}
@@ -140,24 +140,32 @@ export default function Home() {
           )}
 
           {weatherData && errors.length === 0 && !loading && (
-              <div className="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div className={`md:col-span-2 ${cardClasses} rounded-lg p-4`}>
+              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
+                  {/* --- ROW 1: Main Dashboard --- */}
+                  <div className={`xl:col-span-2 md:col-span-2 ${cardClasses}`}>
                       <CurrentWeather current={weatherData.current} today={weatherData.daily[0]} locationName={weatherData.locationName} />
                   </div>
+                  <div className={cardClasses}>
+                       <SunriseSunset sunrise={weatherData.current.sunrise} sunset={weatherData.current.sunset} />
+                  </div>
+                  <div className={cardClasses}>
+                       <UvIndex uv={weatherData.current.uv} />
+                  </div>
 
+                  {/* --- ROW 2: Full-width Forecasts & Alerts --- */}
                   {weatherData.alerts && weatherData.alerts.length > 0 && (
-                      <div className={`md:col-span-2 ${cardClasses} rounded-lg p-4`}>
+                      <div className={`xl:col-span-4 md:col-span-2 ${cardClasses}`}>
                           <h2 className={`text-sm font-semibold ${secondaryText} mb-2`}>Alerts</h2>
                           <WeatherAlerts alerts={weatherData.alerts} />
                       </div>
                   )}
-
-                  <div className={`md:col-span-2 ${cardClasses} rounded-lg p-4`}>
+                  <div className={`xl:col-span-4 md:col-span-2 ${cardClasses}`}>
                     <h2 className={`text-sm font-semibold ${secondaryText} mb-3`}>Hourly Forecast</h2>
                     <HourlyForecast hourly={weatherData.hourly} />
                   </div>
 
-                  <div className={`md:col-span-2 ${cardClasses} rounded-lg p-4`}>
+                  {/* --- ROW 3: Detailed Grid --- */}
+                   <div className={`xl:col-span-4 md:col-span-2 ${cardClasses}`}>
                     <h2 className={`text-sm font-semibold ${secondaryText} mb-3`}>5-Day Forecast</h2>
                     <div className="grid grid-cols-5 gap-2">
                         {weatherData.daily.slice(1, 6).map((day: any) => (
@@ -172,25 +180,20 @@ export default function Home() {
                     </div>
                   </div>
 
-                  <div className={`md:col-span-2 ${cardClasses} rounded-lg p-4`}>
+                  {/* --- ROW 4: Secondary Details --- */}
+                   <div className={`xl:col-span-2 md:col-span-2 ${cardClasses}`}>
                       <h2 className={`text-sm font-semibold ${secondaryText} mb-2`}>Air Quality</h2>
                       <AirQuality airQuality={weatherData.airPollution} />
                   </div>
-
-                  <div className={`${cardClasses} rounded-lg p-4`}>
-                       <UvIndex uv={weatherData.current.uv} />
-                  </div>
-                  <div className={`${cardClasses} rounded-lg p-4`}>
-                       <h2 className={`text-sm font-semibold ${secondaryText} mb-2`}>Sunrise & Sunset</h2>
-                       <SunriseSunset sunrise={weatherData.current.sunrise} sunset={weatherData.current.sunset} />
-                  </div>
-                  <div className={`${cardClasses} rounded-lg p-4`}>
-                      <MoonPhase astro={weatherData.daily[0].astro} />
-                  </div>
-                  <div className={`${cardClasses} rounded-lg p-4`}>
+                  <div className={cardClasses}>
                        <WindStatus wind={weatherData.current} />
                   </div>
-                  <div className={`${cardClasses} rounded-lg p-4`}>
+                   <div className={cardClasses}>
+                      <MoonPhase astro={weatherData.daily[0].astro} />
+                  </div>
+
+                   {/* --- ROW 5: Atmosphere --- */}
+                  <div className={`xl:col-span-4 md:col-span-2 ${cardClasses}`}>
                        <Atmosphere data={weatherData.current} />
                   </div>
               </div>

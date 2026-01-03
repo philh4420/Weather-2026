@@ -1,40 +1,74 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/pages/api-reference/create-next-app).
+# Meteoro - A Modern, Resilient Weather Application
+
+<p align="center">
+  <strong>Live Demo:</strong> [Link to Deployed App]
+</p>
+
+## Overview
+
+Meteoro is a beautifully designed, highly resilient weather application built with Next.js. It provides a comprehensive and visually intuitive weather forecast by intelligently sourcing and merging data from multiple APIs. Its modern interface adapts to the current weather conditions, and its robust backend architecture ensures high availability and transparent error reporting.
+
+## Key Features
+
+- **Dynamic UI & Theming**: The application background and theme dynamically change (from light to dark) based on the current weather conditions, creating an immersive user experience.
+- **Comprehensive Weather Data**: Get all the information you need in one place:
+  - Current weather with temperature, feels-like, high/low, and conditions.
+  - Detailed hourly and 5-day forecasts.
+  - Air Quality Index (AQI) and component pollutants.
+  - UV Index with clear recommendations.
+  - Sunrise and sunset times.
+  - Wind status, gusts, and direction.
+  - Atmospheric pressure and humidity.
+  - Current moon phase.
+  - Real-time weather alerts.
+- **Robust Multi-API Architecture**:
+  - **Resilient Data Fetching**: Aggregates data from both **WeatherAPI** and **OpenWeatherMap**.
+  - **Intelligent Fallback**: If one provider fails to find a location, the system uses coordinates from the other to perform a secondary lookup, dramatically increasing reliability.
+  - **Transparent Error Handling**: If data sources fail, the UI displays a clear, itemized list of all backend errors, so the user is never left guessing.
+- **Modern & Accessible Design**:
+  - Built with a focus on a clean, modern aesthetic using glassmorphism effects and a responsive layout.
+  - Implements **A11Y standards** to be accessible to a wide variety of users.
+  - Features interactive iconography and polished UI components for an intuitive experience.
+- **Geolocation & Manual Search**: Automatically fetches weather for the user's current location or allows for manual searching of any city worldwide.
+
+## Tech Stack
+
+- **Framework**: Next.js (App Router)
+- **Language**: TypeScript
+- **Styling**: Tailwind CSS
+- **UI Components**: React Icons, custom-built components
+- **Date/Time**: `date-fns`
+- **Data Fetching**: Browser `fetch` API
 
 ## Getting Started
 
-First, run the development server:
+To run this project locally, follow these steps:
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+1.  **Clone the repository:**
+    ```bash
+    git clone https://github.com/your-username/meteoro.git
+    cd meteoro
+    ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+2.  **Install dependencies:**
+    ```bash
+    npm install
+    ```
 
-You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
+3.  **Set up environment variables:**
+    Create a file named `.env.local` in the root of the project and add your API keys:
+    ```
+    WEATHERAPI_API_KEY=your_weatherapi_key
+    OPENWEATHERMAP_API_KEY=your_openweathermap_key
+    ```
 
-[API routes](https://nextjs.org/docs/pages/building-your-application/routing/api-routes) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.js`.
+4.  **Run the development server:**
+    ```bash
+    npm run dev
+    ```
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/pages/building-your-application/routing/api-routes) instead of React pages.
+The application will be available at [http://localhost:3000](http://localhost:3000).
 
-This project uses [`next/font`](https://nextjs.org/docs/pages/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+---
 
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn-pages-router) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/pages/building-your-application/deploying) for more details.
+_This README was generated by an AI assistant in the Firebase Studio environment, reflecting the project's as-built state._

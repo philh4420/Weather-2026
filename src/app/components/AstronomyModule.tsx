@@ -1,7 +1,7 @@
 'use client';
 
 import { format, fromUnixTime, addMinutes, subMinutes } from 'date-fns';
-import { FiSunrise, FiSunset, FiMoon } from 'react-icons/fi';
+import { FiSunrise, FiSunset } from 'react-icons/fi';
 import { WiMoonrise, WiMoonset } from 'react-icons/wi';
 
 interface AstronomyModuleProps {
@@ -30,12 +30,11 @@ const AstronomyModule: React.FC<AstronomyModuleProps> = ({ sunrise, sunset, astr
   const blueHourEveningStart = format(sunsetTime, 'HH:mm');
   const blueHourEveningEnd = format(addMinutes(sunsetTime, 30), 'HH:mm');
 
-  const cardClasses = 'border border-border dark:border-dark-border bg-card dark:bg-dark-card shadow-glass-light dark:shadow-glass-dark backdrop-blur-sm rounded-lg p-4 h-full flex flex-col';
   const secondaryText = 'text-secondary-text dark:text-dark-secondary-text';
   const iconStyle = { width: '24px', height: '24px' };
 
   return (
-    <div className={cardClasses}>
+    <div className="h-full flex flex-col">
       <h2 className={`text-sm font-semibold ${secondaryText} mb-4 text-center`}>Astronomical & Photography Data</h2>
       
       <div className="flex-grow grid grid-cols-2 gap-4 text-sm">
@@ -73,7 +72,7 @@ const AstronomyModule: React.FC<AstronomyModuleProps> = ({ sunrise, sunset, astr
       </div>
 
       <div className="mt-4 pt-4 border-t border-border dark:border-dark-border">
-        <h3 className="text-xs font-semibold ${secondaryText} mb-2 text-center">Photography Hours</h3>
+        <h3 className={`text-xs font-semibold ${secondaryText} mb-2 text-center`}>Photography Hours</h3>
         <div className="grid grid-cols-2 gap-x-4 text-xs">
           <div className="text-center">
             <p className="font-bold text-yellow-400">Golden Hour</p>

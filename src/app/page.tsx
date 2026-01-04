@@ -140,7 +140,7 @@ export default function Home() {
           )}
 
           {weatherData && errors.length === 0 && !loading && (
-             <div className="grid grid-cols-1 lg:grid-cols-4 auto-rows-fr gap-6">
+             <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
 
                 {weatherData.alerts && weatherData.alerts.length > 0 && (
                     <div className={`${cardClasses} lg:col-span-4`}>

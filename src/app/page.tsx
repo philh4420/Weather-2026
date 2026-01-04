@@ -124,7 +124,7 @@ export default function Home() {
       {weatherData && weatherData.current && weatherData.current.weather && weatherData.current.weather[0] && errors.length === 0 && (
         <WeatherBackground weatherCondition={weatherData.current.weather[0].main} onThemeChange={handleThemeChange} />
       )}
-      <div className="relative z-10 max-w-screen-lg mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="relative z-10 max-w-screen-2xl mx-auto px-4 sm:px-6 lg:px-8">
         <Header
           location={location}
           setLocation={setLocation}

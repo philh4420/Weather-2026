@@ -13,7 +13,7 @@ const CurrentWeather = ({ current, today, locationName }: { current: any, today:
     return (
         <div className="flex flex-col items-center text-center">
             
-            <h2 className="text-2xl md:text-3xl font-bold">{locationName}</h2>
+            <h1 className="text-2xl md:text-3xl font-bold">{locationName}</h1>
 
             <div className="flex items-center justify-center my-3 md:my-4">
                 {iconUrl && <img src={iconUrl} alt={weatherMain} className="w-24 h-24 md:w-32 md:h-32 -ml-4" />}

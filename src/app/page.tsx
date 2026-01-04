@@ -141,27 +141,24 @@ export default function Home() {
 
           {weatherData && errors.length === 0 && !loading && (
              <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
-                
-                <div className={`${cardClasses} lg:col-span-2 lg:row-span-2`}>
-                    <CurrentWeather current={weatherData.current} today={weatherData.daily[0]} locationName={weatherData.locationName} />
-                </div>
-
-                <div className={`${cardClasses} lg:col-span-2`}>
-                    <h2 className={`text-sm font-semibold ${secondaryText} mb-3 text-center`}>Hourly Forecast</h2>
-                    <HourlyForecast hourly={weatherData.hourly} />
-                </div>
 
                 {weatherData.alerts && weatherData.alerts.length > 0 && (
-                    <div className={`${cardClasses} lg:col-span-2`}>
+                    <div className={`${cardClasses} lg:col-span-4`}>
                         <h2 className={`text-sm font-semibold ${secondaryText} mb-2 text-center`}>Alerts</h2>
                         <WeatherAlerts alerts={weatherData.alerts} />
                     </div>
                 )}
-                
+                <div className={`${cardClasses} lg:col-span-4`}>
+                    <CurrentWeather current={weatherData.current} today={weatherData.daily[0]} locationName={weatherData.locationName} />
+                </div>
+                <div className={`${cardClasses} lg:col-span-4`}>
+                    <h2 className={`text-sm font-semibold ${secondaryText} mb-3 text-center`}>Hourly Forecast</h2>
+                    <HourlyForecast hourly={weatherData.hourly} />
+                </div>
                 <div className={`${cardClasses} lg:col-span-4`}>
                     <h2 className={`text-sm font-semibold ${secondaryText} mb-3 text-center`}>5-Day Forecast</h2>
                     <div className="grid grid-cols-5 gap-2">
-                    {weatherData.daily.slice(0, 5).map((day: any) => (
+                    {weatherData.daily.slice(1, 6).map((day: any) => (
                         <DailyForecastCard
                         key={day.dt}
                         day={format(new Date(day.dt * 1000), 'EEE')}

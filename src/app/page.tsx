@@ -16,6 +16,7 @@ import WeatherBackground from '@/app/components/WeatherBackground';
 import ErrorDisplay from '@/app/components/ErrorDisplay';
 import Header from '@/app/components/Header';
 import Loading from '@/app/components/Loading';
+import TimeTravel from '@/app/components/TimeTravel';
 
 export default function Home() {
   const [location, setLocation] = useState('');
@@ -185,6 +186,12 @@ export default function Home() {
               <div className={`xl:col-span-4 md:col-span-2 ${cardClasses}`}>
                 <Atmosphere data={weatherData.current} />
               </div>
+
+              {/* --- ROW 7: Time Travel (Full Width) --- */}
+              <div className="xl:col-span-4 md:col-span-2">
+                <TimeTravel />
+              </div>
+
             </div>
           )}
         </main>

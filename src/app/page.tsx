@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { format } from 'date-fns';
+import dynamic from 'next/dynamic';
 import DailyForecastCard from '@/app/components/DailyForecastCard';
 import HourlyForecast from '@/app/components/HourlyForecast';
 import AirQuality from '@/app/components/AirQuality';
@@ -16,7 +17,12 @@ import WeatherBackground from '@/app/components/WeatherBackground';
 import ErrorDisplay from '@/app/components/ErrorDisplay';
 import Header from '@/app/components/Header';
 import Loading from '@/app/components/Loading';
-import TimeTravel from '@/app/components/TimeTravel';
+import WellnessDashboard from '@/app/components/WellnessDashboard';
+
+const WeatherMap = dynamic(() => import('@/app/components/WeatherMap'), { 
+  ssr: false,
+  loading: () => <div className="w-full h-[400px] bg-card dark:bg-dark-card rounded-lg flex items-center justify-center"><p>Loading Map...</p></div>
+});
 
 export default function Home() {
   const [location, setLocation] = useState('');
@@ -55,6 +61,11 @@ export default function Home() {
       setLoading(false);
     }
   }, []);
+
+  const handleMapClick = (lat: number, lon: number) => {
+    const newLocation = `${lat},${lon}`;
+    fetchWeatherData(newLocation);
+  };
 
   useEffect(() => {
     if (navigator.geolocation) {
@@ -148,13 +159,28 @@ export default function Home() {
                 <UvIndex uv={weatherData.current.uv} />
               </div>
 
-              {/* --- ROW 3: Hourly Forecast (Full Width) --- */}
+              {/* --- ROW 4: Hourly Forecast (Full Width) --- */}
               <div className={`xl:col-span-4 md:col-span-2 ${cardClasses}`}>
                 <h2 className={`text-sm font-semibold ${secondaryText} mb-3 text-center`}>Hourly Forecast</h2>
                 <HourlyForecast hourly={weatherData.hourly} />
               </div>
 
-              {/* --- ROW 4: 5-Day Forecast (Full Width) --- */}
+              {/* --- ROW 5: Wellness Dashboard (Full Width) --- */}
+              {weatherData.wellness && weatherData.pollen && (
+                <WellnessDashboard wellnessData={weatherData.wellness} pollenData={weatherData.pollen} />
+              )}
+
+              {/* --- ROW 6: Interactive Weather Map (Full Width) --- */}
+              {weatherData.lat && weatherData.lon && weatherData.openWeatherMapApiKey && (
+                <WeatherMap 
+                  lat={weatherData.lat} 
+                  lon={weatherData.lon} 
+                  openWeatherMapApiKey={weatherData.openWeatherMapApiKey}
+                  onMapClick={handleMapClick} 
+                />
+              )}
+
+              {/* --- ROW 7: 5-Day Forecast (Full Width) --- */}
               <div className={`xl:col-span-4 md:col-span-2 ${cardClasses}`}>
                 <h2 className={`text-sm font-semibold ${secondaryText} mb-3 text-center`}>5-Day Forecast</h2>
                 <div className="grid grid-cols-5 gap-2">
@@ -170,7 +196,7 @@ export default function Home() {
                 </div>
               </div>
 
-              {/* --- ROW 5: Secondary Details --- */}
+              {/* --- ROW 8: Secondary Details --- */}
               <div className={`xl:col-span-2 md:col-span-2 ${cardClasses}`}>
                 <h2 className={`text-sm font-semibold ${secondaryText} mb-2 text-center`}>Air Quality</h2>
                 <AirQuality airQuality={weatherData.airPollution} />
@@ -182,16 +208,10 @@ export default function Home() {
                 <MoonPhase astro={weatherData.daily[0].astro} />
               </div>
 
-              {/* --- ROW 6: Atmosphere (Full Width) --- */}
+              {/* --- ROW 9: Atmosphere (Full Width) --- */}
               <div className={`xl:col-span-4 md:col-span-2 ${cardClasses}`}>
                 <Atmosphere data={weatherData.current} />
               </div>
-
-              {/* --- ROW 7: Time Travel (Full Width) --- */}
-              <div className="xl:col-span-4 md:col-span-2">
-                <TimeTravel />
-              </div>
-
             </div>
           )}
         </main>

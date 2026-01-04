@@ -3,7 +3,7 @@
 
 ## **1. Overview**
 
-This document outlines the design, features, and development plan for the Meteoro Weather App. The application is a modern, Apple-inspired weather forecasting tool built with Next.js and deployed on Firebase. It aims to provide a beautiful, intuitive, and highly responsive user experience with a "2026+" futuristic aesthetic.
+This document outlines the design, features, and development plan for the Meteoro Weather App. The application is a modern, Apple-inspired weather forecasting tool built with Next.js and deployed on Firebase. It aims to provide a beautiful, intuitive, and highly responsive user experience with a "2026+" futuristic aesthetic, evolving into a personal wellness advisor.
 
 ---
 
@@ -14,50 +14,56 @@ This section details the application's features and styles as they currently exi
 ### **Styling & Design**
 
 *   **Global Styles (`globals.css`):**
-    *   **Tailwind CSS:** The project uses Tailwind CSS for utility-first styling.
-    *   **"Liquid Light" Effect:** A custom, theme-aware text animation that creates a shimmering, liquid-like gradient on text. Applied with the `.liquid-light` class.
-    *   **Modern Scrollbar:** A custom, minimalist scrollbar for a cleaner look.
-    *   **Noise Background:** A subtle noise texture is applied to the main background for a premium, tactile feel.
-*   **Font:** The application uses the "Poppins" font from Google Fonts.
+    *   **Tailwind CSS:** Utility-first styling.
+    *   **"Liquid Light" Effect:** A custom, theme-aware text animation for a shimmering, liquid-like gradient on text.
+    *   **Modern Scrollbar:** A custom, minimalist scrollbar.
+    *   **Noise Background:** A subtle noise texture on the main background for a premium, tactile feel.
+*   **Font:** "Poppins" from Google Fonts.
 *   **Layout Consistency:** All component cards feature centered headings for a balanced and professional layout.
 
-### **Components**
+### **Core Components**
 
-*   **`Loading.tsx`:**
-    *   A futuristic and theme-aware loading animation that replaces the generic default spinner.
-    *   **"Quantum Spinner":** A visually captivating animation featuring multiple concentric, rotating rings with different colors and timings.
-*   **(Other Components):** The application includes a full suite of weather components, all styled to be consistent with the overall modern aesthetic.
+*   **`Loading.tsx`:** A futuristic "Quantum Spinner" loading animation.
+*   **`WeatherBackground.tsx`:** A dynamic background that changes based on the current weather conditions and time of day.
+*   **Full Suite of Weather Cards:** The application includes a comprehensive set of components for displaying all aspects of the weather (`CurrentWeather`, `HourlyForecast`, `DailyForecastCard`, `AirQuality`, `UvIndex`, `SunriseSunset`, `WindStatus`, `Atmosphere`, `MoonPhase`, `WeatherAlerts`).
+*   **`WellnessDashboard.tsx`:** A 2x2 grid displaying wellness-related advice.
+    *   **`ActivityAdvisor.tsx`:** Provides advice on the best time for outdoor activities.
+    *   **`SkinAdvisor.tsx`:** Offers skin protection advice based on UV index.
+    *   **`PollenForecast.tsx`:** Displays pollen levels for tree, grass, and weed.
+    *   **`BreathingAdvisor.tsx`:** Gives advice based on air quality and pollen levels.
+*   **`WeatherMap.tsx`:** An interactive map with selectable data layers (Temperature, Wind Speed, Clouds) and an optional precipitation overlay. It includes a legend and allows users to click to get weather for a new location.
 
 ### **Application Structure (App Router)**
 
-*   **`layout.tsx`:** The root layout, applying the global font and background styles.
+*   **`layout.tsx`:** The root layout, applying global styles.
 *   **`page.tsx`:** The main page that orchestrates the layout and data fetching for all weather components.
 
 ---
 
-## **3. Current Plan**
+## **3. Development Plan**
 
-This section outlines the most recent changes and the next steps.
+This section outlines the development history and next steps.
 
-### **New Feature Plan: "Time Travel" - Historical & Future Weather Insights**
+### **Current Plan: Hyper-Local, Minute-by-Minute Forecast**
 
-The next major feature is to implement a "Time Travel" module, allowing users to explore past and future weather, transforming the app into an exploratory experience.
+The next goal is to implement a "killer feature" that provides an immediate, short-term precipitation forecast.
 
-*   **Phase 1: Backend API Enhancement**
-    1.  **New API Endpoint:** Create a new route, `api/weather/timetravel`, to handle fetching historical and extended forecast data from the OpenWeatherMap API.
-    2.  **Historical Logic:** The endpoint will accept a location and a date to fetch data for a specific day.
-    3.  **"On This Day" Logic:** The endpoint will also handle requests to fetch weather for the same date in previous years.
+*   **Concept:** Answer the user's most immediate weather question: "Is it going to rain on me *right now*?"
+*   **Features:**
+    *   A dedicated component that displays a summary like "Light rain starting in 12 minutes" or "Rain stopping in 25 minutes."
+    *   A simple, visual timeline showing rain intensity over the next 60 minutes.
+*   **APIs:** OpenWeatherMap and WeatherAPI both offer minutely precipitation forecasts.
+*   **Implementation Steps:**
+    1.  **Backend Update:** Modify the `/api/weather` endpoint to fetch and include minutely forecast data.
+    2.  **Component Creation:** Create a new `MinutelyForecast.tsx` component.
+    3.  **Visualization:** Design a visual timeline to represent rain intensity over the next hour.
+    4.  **Summary Logic:** Implement the logic to generate the human-readable summary message.
+    5.  **Frontend Integration:** Add the new `MinutelyForecast` component to the main page.
 
-*   **Phase 2: Frontend Component Development**
-    1.  **`TimeTravel.tsx` Component:** Create a new, dedicated component for the feature's UI.
-    2.  **UI - "Chrono-Dial":** Design a sleek, interactive "Chrono-Dial" or a highly-styled linear calendar for intuitive date selection.
-    3.  **UI - Data Display:** Create a distinct "archival" card style to display historical weather data, including temperature, precipitation, and a weather icon, using our established modern design language.
+### **Completed Milestones**
 
-*   **Phase 3: Integration**
-    1.  **Integrate into `page.tsx`:** Add the new `TimeTravel.tsx` component to the main application grid.
-    2.  **State Management:** Implement the necessary state and data-fetching logic to power the component.
-
-### **Previously Completed Steps**
-
-1.  **Layout Refinement:** Centered all component headings for a consistent UI.
-2.  **Modernize Loading State:** Implemented the "Quantum Spinner" for a futuristic loading animation.
+1.  **Modernized Loading State:** Implemented the "Quantum Spinner."
+2.  **Layout Refinement:** Centered all component headings.
+3.  **Core Weather Suite:** Built a comprehensive set of components for displaying weather data.
+4.  **Advanced Health & Activity Dashboard:** Implemented the "Wellness Dashboard" with activity, skin, pollen, and breathing advisors.
+5.  **Interactive, Layered Weather Map:** Created an interactive map with selectable data layers, a legend, and click-to-update functionality.

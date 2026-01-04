@@ -1,7 +1,6 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
-import { FiLoader } from 'react-icons/fi';
 import { format } from 'date-fns';
 import DailyForecastCard from '@/app/components/DailyForecastCard';
 import HourlyForecast from '@/app/components/HourlyForecast';
@@ -16,6 +15,7 @@ import MoonPhase from '@/app/components/MoonPhase';
 import WeatherBackground from '@/app/components/WeatherBackground';
 import ErrorDisplay from '@/app/components/ErrorDisplay';
 import Header from '@/app/components/Header';
+import Loading from '@/app/components/Loading';
 
 export default function Home() {
   const [location, setLocation] = useState('');
@@ -119,9 +119,7 @@ export default function Home() {
 
         <main className="pb-10">
           {loading && (
-            <div className="flex justify-center items-center h-[calc(100vh-200px)]">
-              <FiLoader className={`animate-spin text-4xl ${secondaryText}`} />
-            </div>
+            <Loading />
           )}
 
           {errors.length > 0 && !loading && (

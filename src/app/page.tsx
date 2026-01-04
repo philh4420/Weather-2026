@@ -116,7 +116,7 @@ export default function Home() {
     }
   };
 
-  const cardClasses = 'border border-border dark:border-dark-border bg-card dark:bg-dark-card shadow-glass-light dark:shadow-glass-dark backdrop-blur-sm rounded-lg p-4';
+  const cardClasses = 'border border-border dark:border-dark-border bg-card dark:bg-dark-card shadow-glass-light dark:shadow-glass-dark backdrop-blur-sm rounded-lg p-4 flex flex-col';
   const secondaryText = 'text-secondary-text dark:text-dark-secondary-text';
 
   return (
@@ -140,75 +140,76 @@ export default function Home() {
           )}
 
           {weatherData && errors.length === 0 && !loading && (
-            <div className="flex flex-col gap-6">
-              {/* --- Primary Full-Width Modules --- */}
-              {weatherData.alerts && weatherData.alerts.length > 0 && (
-                <div className={cardClasses}>
-                  <h2 className={`text-sm font-semibold ${secondaryText} mb-2 text-center`}>Alerts</h2>
-                  <WeatherAlerts alerts={weatherData.alerts} />
-                </div>
-              )}
-              <div className={cardClasses}>
-                <CurrentWeather current={weatherData.current} today={weatherData.daily[0]} locationName={weatherData.locationName} />
-              </div>
-              <div className={cardClasses}>
-                <h2 className={`text-sm font-semibold ${secondaryText} mb-3 text-center`}>Hourly Forecast</h2>
-                <HourlyForecast hourly={weatherData.hourly} />
-              </div>
-              <div className={cardClasses}>
-                <h2 className={`text-sm font-semibold ${secondaryText} mb-3 text-center`}>5-Day Forecast</h2>
-                <div className="grid grid-cols-5 gap-2">
-                  {weatherData.daily.slice(1, 6).map((day: any) => (
-                    <DailyForecastCard
-                      key={day.dt}
-                      day={format(new Date(day.dt * 1000), 'EEE')}
-                      pop={day.pop}
-                      temp={day.temp}
-                      weather={day.weather}
-                    />
-                  ))}
-                </div>
-              </div>
+             <div className="grid grid-cols-1 lg:grid-cols-4 auto-rows-fr gap-6">
 
-              {/* --- Secondary Modules Grid --- */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <div className={`${cardClasses} md:col-span-2`}>
-                  <h2 className={`text-sm font-semibold ${secondaryText} mb-2 text-center`}>Air Quality</h2>
-                  <AirQuality airQuality={weatherData.airPollution} />
-                </div>
-                {weatherData.wellness && weatherData.pollen && (
-                    <div className="md:col-span-2">
-                        <WellnessDashboard wellnessData={weatherData.wellness} pollenData={weatherData.pollen} />
+                {weatherData.alerts && weatherData.alerts.length > 0 && (
+                    <div className={`${cardClasses} lg:col-span-4`}>
+                        <h2 className={`text-sm font-semibold ${secondaryText} mb-2 text-center`}>Alerts</h2>
+                        <WeatherAlerts alerts={weatherData.alerts} />
                     </div>
                 )}
-                <div className={cardClasses}>
-                  <UvIndex uv={weatherData.current.uv} />
+                <div className={`${cardClasses} lg:col-span-4`}>
+                    <CurrentWeather current={weatherData.current} today={weatherData.daily[0]} locationName={weatherData.locationName} />
                 </div>
-                <div className={cardClasses}>
-                  <WindStatus wind={weatherData.current} />
+                <div className={`${cardClasses} lg:col-span-4`}>
+                    <h2 className={`text-sm font-semibold ${secondaryText} mb-3 text-center`}>Hourly Forecast</h2>
+                    <HourlyForecast hourly={weatherData.hourly} />
                 </div>
-                <div className={`${cardClasses} md:col-span-2`}>
-                  <Atmosphere data={weatherData.current} />
+                <div className={`${cardClasses} lg:col-span-4`}>
+                    <h2 className={`text-sm font-semibold ${secondaryText} mb-3 text-center`}>5-Day Forecast</h2>
+                    <div className="grid grid-cols-5 gap-2">
+                    {weatherData.daily.slice(1, 6).map((day: any) => (
+                        <DailyForecastCard
+                        key={day.dt}
+                        day={format(new Date(day.dt * 1000), 'EEE')}
+                        pop={day.pop}
+                        temp={day.temp}
+                        weather={day.weather}
+                        />
+                    ))}
+                    </div>
                 </div>
-                <div className={`${cardClasses} md:col-span-2`}>
-                  <AstronomyModule sunrise={weatherData.current.sunrise} sunset={weatherData.current.sunset} astro={weatherData.daily[0].astro} />
+                
+                <div className={`${cardClasses} lg:col-span-2`}>
+                    <h2 className={`text-sm font-semibold ${secondaryText} mb-2 text-center`}>Air Quality</h2>
+                    <AirQuality airQuality={weatherData.airPollution} />
                 </div>
-              </div>
 
-              {/* --- Full-Width Map --- */}
-              {weatherData.lat && weatherData.lon && weatherData.openWeatherMapApiKey && (
-                <div className={`${cardClasses} flex flex-col h-[450px]`}>
-                  <h2 className={`text-sm font-semibold ${secondaryText} mb-4 text-center`}>Interactive Weather Map</h2>
-                  <div className="flex-grow rounded-lg overflow-hidden">
-                    <WeatherMap 
-                      lat={weatherData.lat} 
-                      lon={weatherData.lon} 
-                      openWeatherMapApiKey={weatherData.openWeatherMapApiKey}
-                      onMapClick={handleMapClick} 
-                    />
-                  </div>
+                {weatherData.wellness && weatherData.pollen && (
+                    <div className={`${cardClasses} lg:col-span-2`}>
+                      <WellnessDashboard wellnessData={weatherData.wellness} pollenData={weatherData.pollen} />
+                    </div>
+                )}
+
+                <div className={cardClasses}>
+                    <UvIndex uv={weatherData.current.uv} />
                 </div>
-              )}
+
+                <div className={cardClasses}>
+                    <WindStatus wind={weatherData.current} />
+                </div>
+
+                <div className={cardClasses}>
+                    <AstronomyModule sunrise={weatherData.current.sunrise} sunset={weatherData.current.sunset} astro={weatherData.daily[0].astro} />
+                </div>
+
+                <div className={cardClasses}>
+                    <Atmosphere data={weatherData.current} />
+                </div>
+
+                {weatherData.lat && weatherData.lon && weatherData.openWeatherMapApiKey && (
+                  <div className={`${cardClasses} lg:col-span-4 flex flex-col h-[400px]`}>
+                    <h2 className={`text-sm font-semibold ${secondaryText} mb-4 text-center`}>Interactive Weather Map</h2>
+                    <div className="flex-grow rounded-lg overflow-hidden">
+                      <WeatherMap 
+                        lat={weatherData.lat}
+                        lon={weatherData.lon}
+                        openWeatherMapApiKey={weatherData.openWeatherMapApiKey}
+                        onMapClick={handleMapClick}
+                      />
+                    </div>
+                  </div>
+                )}
             </div>
           )}
         </main>

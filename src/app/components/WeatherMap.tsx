@@ -50,75 +50,70 @@ const WeatherMap: React.FC<WeatherMapProps> = ({ lat, lon, openWeatherMapApiKey,
   const [activeLayer, setActiveLayer] = useState('Standard');
   const [isPrecipitationVisible, setIsPrecipitationVisible] = useState(false);
 
-  const cardClasses = 'border border-border dark:border-dark-border bg-card dark:bg-dark-card shadow-glass-light dark:shadow-glass-dark backdrop-blur-sm rounded-lg p-4';
-
   const darkMapUrl = "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png";
   const mapAttribution = '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>';
   const weatherAttribution = 'Weather data &copy; OpenWeatherMap';
 
   return (
-    <div className={`xl:col-span-4 md:col-span-2 ${cardClasses} relative`}>
-       <h2 className={`text-sm font-semibold text-secondary-text dark:text-dark-secondary-text mb-4 text-center`}>Interactive Weather Map</h2>
-      <MapContainer center={[lat, lon]} zoom={7} style={{ height: '400px', width: '100%' }} className="rounded-lg">
-        <ChangeView lat={lat} lon={lon} />
-        <MapEvents 
-            onBaseLayerChange={(name) => setActiveLayer(name)} 
-            onOverlayChange={(name, added) => {
-                if (name === 'Precipitation') {
-                    setIsPrecipitationVisible(added);
-                }
-            }}
-            onMapClick={onMapClick}
-        />
-        <LayersControl position="topright">
-          <LayersControl.BaseLayer checked name="Standard">
+    <MapContainer center={[lat, lon]} zoom={7} style={{ height: '100%', width: '100%' }} className="rounded-lg">
+      <ChangeView lat={lat} lon={lon} />
+      <MapEvents 
+          onBaseLayerChange={(name) => setActiveLayer(name)} 
+          onOverlayChange={(name, added) => {
+              if (name === 'Precipitation') {
+                  setIsPrecipitationVisible(added);
+              }
+          }}
+          onMapClick={onMapClick}
+      />
+      <LayersControl position="topright">
+        <LayersControl.BaseLayer checked name="Standard">
+          <TileLayer
+            url={darkMapUrl}
+            attribution={mapAttribution}
+          />
+        </LayersControl.BaseLayer>
+
+        <LayersControl.BaseLayer name="Temperature">
+          <LayerGroup>
+            <TileLayer url={darkMapUrl} attribution={mapAttribution} />
             <TileLayer
-              url={darkMapUrl}
-              attribution={mapAttribution}
-            />
-          </LayersControl.BaseLayer>
-
-          <LayersControl.BaseLayer name="Temperature">
-            <LayerGroup>
-              <TileLayer url={darkMapUrl} attribution={mapAttribution} />
-              <TileLayer
-                url={`https://tile.openweathermap.org/map/temp_new/{z}/{x}/{y}.png?appid=${openWeatherMapApiKey}`}
-                attribution={weatherAttribution}
-              />
-            </LayerGroup>
-          </LayersControl.BaseLayer>
-
-          <LayersControl.BaseLayer name="Wind Speed">
-            <LayerGroup>
-              <TileLayer url={darkMapUrl} attribution={mapAttribution} />
-              <TileLayer
-                url={`https://tile.openweathermap.org/map/wind_new/{z}/{x}/{y}.png?appid=${openWeatherMapApiKey}`}
-                attribution={weatherAttribution}
-              />
-            </LayerGroup>
-          </LayersControl.BaseLayer>
-
-          <LayersControl.BaseLayer name="Clouds">
-            <LayerGroup>
-              <TileLayer url={darkMapUrl} attribution={mapAttribution} />
-              <TileLayer
-                url={`https://tile.openweathermap.org/map/clouds_new/{z}/{x}/{y}.png?appid=${openWeatherMapApiKey}`}
-                attribution={weatherAttribution}
-              />
-            </LayerGroup>
-          </LayersControl.BaseLayer>
-          
-          <LayersControl.Overlay name="Precipitation">
-            <TileLayer
-              url={`https://tile.openweathermap.org/map/precipitation_new/{z}/{x}/{y}.png?appid=${openWeatherMapApiKey}`}
+              url={`https://tile.openweathermap.org/map/temp_new/{z}/{x}/{y}.png?appid=${openWeatherMapApiKey}`}
               attribution={weatherAttribution}
             />
-          </LayersControl.Overlay>
-        </LayersControl>
-        <Marker position={[lat, lon]} icon={customMarkerIcon}></Marker>
-        <MapLegend activeLayer={activeLayer} isPrecipitationVisible={isPrecipitationVisible} />
-      </MapContainer>
-    </div>
+          </LayerGroup>
+        </LayersControl.BaseLayer>
+
+        <LayersControl.BaseLayer name="Wind Speed">
+          <LayerGroup>
+            <TileLayer url={darkMapUrl} attribution={mapAttribution} />
+            <TileLayer
+              url={`https://tile.openweathermap.org/map/wind_new/{z}/{x}/{y}.png?appid=${openWeatherMapApiKey}`}
+              attribution={weatherAttribution}
+            />
+          </LayerGroup>
+        </LayersControl.BaseLayer>
+
+        <LayersControl.BaseLayer name="Clouds">
+          <LayerGroup>
+            <TileLayer url={darkMapUrl} attribution={mapAttribution} />
+            <TileLayer
+              url={`https://tile.openweathermap.org/map/clouds_new/{z}/{x}/{y}.png?appid=${openWeatherMapApiKey}`}
+              attribution={weatherAttribution}
+            />
+          </LayerGroup>
+        </LayersControl.BaseLayer>
+        
+        <LayersControl.Overlay name="Precipitation">
+          <TileLayer
+            url={`https://tile.openweathermap.org/map/precipitation_new/{z}/{x}/{y}.png?appid=${openWeatherMapApiKey}`}
+            attribution={weatherAttribution}
+          />
+        </LayersControl.Overlay>
+      </LayersControl>
+      <Marker position={[lat, lon]} icon={customMarkerIcon}></Marker>
+      <MapLegend activeLayer={activeLayer} isPrecipitationVisible={isPrecipitationVisible} />
+    </MapContainer>
   );
 };
 

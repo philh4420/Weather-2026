@@ -15,7 +15,7 @@ const WellnessDashboard: React.FC<WellnessDashboardProps> = ({ wellnessData, pol
   const secondaryText = 'text-secondary-text dark:text-dark-secondary-text';
 
   return (
-    <div className={`xl:col-span-4 md:col-span-2 ${cardClasses}`}>
+    <div className={cardClasses}>
        <h2 className={`text-sm font-semibold ${secondaryText} mb-4 text-center`}>Wellness Dashboard</h2>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <ActivityAdvisor advice={wellnessData.activity} />

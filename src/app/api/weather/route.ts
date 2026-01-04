@@ -238,7 +238,12 @@ export async function GET(req: NextRequest) {
         }
 
         const mergedData = mergeWeatherData(weatherApiData, openWeatherData, airPollutionData, pollenData);
-        return NextResponse.json(mergedData);
+        
+        // Return all the data PLUS the OpenWeatherMap API key
+        return NextResponse.json({
+            ...mergedData,
+            openWeatherMapApiKey: openWeatherMapApiKey,
+        });
 
     } catch (error) {
         if (error instanceof Error) {

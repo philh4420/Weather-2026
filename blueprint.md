@@ -1,89 +1,51 @@
-# Meteoro Weather App Blueprint
 
-## 1. Overview
+# **Project Blueprint: Meteoro Weather App**
 
-Meteoro is a modern, design-focused weather application. It provides real-time weather data, multi-day forecasts, air quality information, and other meteorological details. The interface is designed to be beautiful, intuitive, and fully responsive, with a dynamic theme system that adapts to the current weather conditions.
+## **1. Overview**
 
-## 2. Implemented Features & Design
+This document outlines the design, features, and development plan for the Meteoro Weather App. The application is a modern, Apple-inspired weather forecasting tool built with Next.js and deployed on Firebase. It aims to provide a beautiful, intuitive, and highly responsive user experience.
 
-This section documents all features, styles, and architectural decisions implemented in the application to date.
+---
 
-### 2.1. Core Architecture
-*   **Framework:** Next.js 14+ with App Router.
-*   **Language:** TypeScript.
-*   **Package Manager:** npm.
+## **2. Project Outline (Current State)**
 
-### 2.2. Styling & Theming
-*   **CSS Framework:** Tailwind CSS.
-*   **Font:** Poppins.
-*   **Base Styles:** A custom theme is defined in `tailwind.config.ts` for consistent colors, spacing, and typography across light and dark modes.
-*   **Background:** A subtle `bg-noise` texture is applied over a dark base (`#121212`) for a premium feel.
-*   **Dynamic Theme:** The background color and accent elements change dynamically based on the current weather condition (`WeatherBackground` component).
-*   **Cards:** UI cards feature a modern glassmorphism effect (`shadow-glass-light`, `dark:shadow-glass-dark`, `backdrop-blur-sm`).
+This section details the application's features and styles as they currently exist.
 
-### 2.3. Backend API (`/api/weather`)
-*   **Data Aggregation:** A single server-side route fetches data from two external sources: **WeatherAPI** and **OpenWeatherMap**.
-*   **Data Merging:** The route merges the responses to create a unified data structure, combining the strengths of both APIs.
-*   **Air Quality:** It makes a third call to fetch detailed air pollution data based on the location coordinates.
-*   **Error Handling:**
-    *   Includes a fallback mechanism: If the primary API fails on a location search, it attempts a second search using coordinates from the other API.
-    *   Returns clear error messages in a JSON object.
-    *   **Data Integrity:** Gracefully handles missing `uv` data at the source, returning `null` instead of `undefined` to prevent client-side `NaN` errors.
+### **Styling & Design**
 
-### 2.4. Components
-*   **`CurrentWeather`**: Displays primary weather info: location, temperature, condition, and high/lows.
-*   **`HourlyForecast`**: A horizontally scrollable list of the weather for the next several hours.
-*   **`DailyForecastCard`**: Compact cards for the 5-day forecast.
-*   **`AirQuality`**: Shows the Air Quality Index (AQI) and breaks down individual pollutant levels.
-*   **`UvIndex`**:
-    *   Displays the UV index value with a corresponding status level (Low, Moderate, etc.).
-    *   Features a circular SVG progress indicator that visually represents the UV level.
-    *   The indicator color and text are dynamically styled using themed Tailwind classes (e.g., `text-green-500`).
-    *   Includes a smooth, theme-compliant CSS transition for the progress animation.
-    *   Displays a skeleton loader during data fetching and correctly handles `null` or invalid data.
-*   **`SunriseSunset`**: Shows sunrise and sunset times with a dynamic arc that tracks the sun's position during the day.
-*   **`WindStatus`**: Displays wind speed, gust speed, and direction with a compass-like indicator.
-*   **`Atmosphere`**: Shows humidity, pressure, and visibility.
-*   **`MoonPhase`**: Shows the current moon phase and rise/set times.
-*   **`WeatherAlerts`**: Lists any active weather alerts for the location.
-*   **`ErrorDisplay`**: A dedicated component to show API or network errors with a retry button.
+*   **Global Styles (`globals.css`):**
+    *   **Tailwind CSS:** The project uses Tailwind CSS for utility-first styling.
+    *   **"Liquid Light" Effect:** A custom, theme-aware text animation that creates a shimmering, liquid-like gradient on text. It is defined directly in `globals.css` and applied with the `.liquid-light` class.
+        *   **Light Mode:** A subtle gradient moving from dark gray to a lighter gray.
+        *   **Dark Mode:** A bright, near-white gradient with a soft white text shadow to ensure high contrast and readability.
+    *   **Modern Scrollbar:** A custom, minimalist scrollbar for a cleaner look.
+    *   **Noise Background:** A subtle noise texture is applied to the main background for a premium, tactile feel.
+*   **Font:** The application uses the "Poppins" font from Google Fonts for a clean, modern aesthetic.
 
-### 2.5. Client-Side Logic (`page.tsx`)
-*   **State Management:** Uses `useState` and `useEffect` hooks for managing location, weather data, loading status, and errors.
-*   **Data Fetching:**
-    *   Initiates a data fetch on page load using the browser's geolocation API.
-    *   Falls back to a default location ('New York') if geolocation is denied or unavailable.
-    *   Allows users to manually search for a new location.
-*   **Layout:** Currently a single-column layout, which is the subject of the current change request.
+### **Components**
 
-## 3. Current Task: Modern Responsive Layout
+*   **`DateTime.tsx`:**
+    *   A client-side component that displays the current time and date.
+    *   The time display utilizes the "Liquid Light" effect for a dynamic visual.
+    *   The date is formatted for the UK (enGB) locale.
+    *   The component features a theme-aware design with a rounded, pill-shaped background and a pulsing border animation.
 
-**Goal:** Rearchitect the main page layout in `src/app/page.tsx` to be more modern, visually balanced, and responsive across all screen sizes, without modifying the internal code of any component.
+### **Application Structure (App Router)**
 
-### 3.1. Plan
-1.  **Grid System:** Replace the current single-column structure with a responsive 12-column grid.
-    *   `grid-cols-1` (Mobile)
-    *   `md:grid-cols-2` (Tablet)
-    *   `xl:grid-cols-4` (Desktop)
-2.  **Viewport Maximization:** Expand the main container to `max-w-screen-xl` to make better use of horizontal space on large monitors.
-3.  **Component Orchestration:** Rearrange the components into a more logical and visually appealing hierarchy.
+*   **`layout.tsx`:** The root layout for the application. It applies the global font, background styles, and the noise texture effect.
+*   **`page.tsx`:** The main page of the application, which currently displays the `DateTime` component.
 
-    *   **Row 1 (Primary Dashboard):**
-        *   `CurrentWeather`: Span `xl:col-span-2` and `md:col-span-2` to give it prominence.
-        *   `SunriseSunset`: Place next to `CurrentWeather`.
-        *   `UvIndex`: Place next to `CurrentWeather`.
+### **Dependencies**
 
-    *   **Row 2 (Full-Width Info):**
-        *   `HourlyForecast`: Span the full width (`xl:col-span-4`, `md:col-span-2`).
-        *   `WeatherAlerts` (if present): Span the full width (`xl:col-span-4`, `md:col-span-2`).
+*   **`date-fns`:** Used for robust and consistent date and time formatting.
 
-    *   **Row 3 (Detailed Grid):**
-        *   `5-Day Forecast`: Span the full width (`xl:col-span-4`, `md:col-span-2`).
-        *   `AirQuality`: Span `xl:col-span-2` and `md:col-span-2`.
-    
-    *   **Row 4 (Secondary Grid):**
-        *   `WindStatus`
-        *   `MoonPhase`
-        *   `Atmosphere`: Span `xl:col-span-2`
+---
 
-4.  **Responsiveness:** Ensure the layout gracefully adapts to smaller screens, stacking elements logically. Add responsive gap utilities for consistent spacing.
+## **3. Current Plan**
+
+The immediate goal was to resolve a critical issue where CSS styles were not being applied, preventing the "Liquid Light" effect from rendering. This has been resolved.
+
+**Next Steps:**
+
+1.  **Finalize Clock Appearance:** Ensure the "Liquid Light" effect on the clock is visually appealing and highly readable in both light and dark modes.
+2.  **Continue Feature Development:** Proceed with building the core weather forecasting features of the application.

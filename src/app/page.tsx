@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
-import { FiSearch, FiLoader, FiMapPin } from 'react-icons/fi';
+import { FiLoader } from 'react-icons/fi';
 import { format } from 'date-fns';
 import DailyForecastCard from '@/app/components/DailyForecastCard';
 import HourlyForecast from '@/app/components/HourlyForecast';
@@ -15,6 +15,7 @@ import Atmosphere from '@/app/components/Atmosphere';
 import MoonPhase from '@/app/components/MoonPhase';
 import WeatherBackground from '@/app/components/WeatherBackground';
 import ErrorDisplay from '@/app/components/ErrorDisplay';
+import Header from '@/app/components/Header';
 
 export default function Home() {
   const [location, setLocation] = useState('');
@@ -109,24 +110,12 @@ export default function Home() {
         <WeatherBackground weatherCondition={weatherData.current.weather[0].main} onThemeChange={handleThemeChange} />
       )}
       <div className="relative z-10 max-w-screen-xl mx-auto px-4 sm:px-6 lg:px-8">
-        <header className="py-4 flex justify-between items-center">
-          <h1 className="text-xl font-bold">Meteoro</h1>
-          <div className="flex items-center space-x-2">
-            <form onSubmit={handleSearch} className="relative">
-              <input
-                type="text"
-                value={location}
-                onChange={(e) => setLocation(e.target.value)}
-                className="bg-card/80 dark:bg-dark-card/80 border border-border dark:border-dark-border rounded-full py-2 pl-10 pr-4 focus:outline-none focus:ring-2 focus:ring-link-blue backdrop-blur-sm shadow-glass-light dark:shadow-glass-dark"
-                placeholder="Search city..."
-              />
-              <FiSearch className={`absolute left-3 top-1/2 -translate-y-1/2 ${secondaryText}`} />
-            </form>
-            <button onClick={handleGeolocation} className="bg-card/80 dark:bg-dark-card/80 border border-border dark:border-dark-border p-2 rounded-full hover:bg-opacity-80 transition-colors backdrop-blur-sm shadow-glass-light dark:shadow-glass-dark">
-              <FiMapPin className="text-link-blue" />
-            </button>
-          </div>
-        </header>
+        <Header 
+            location={location} 
+            setLocation={setLocation} 
+            handleSearch={handleSearch} 
+            handleGeolocation={handleGeolocation} 
+        />
 
         <main className="pb-10">
           {loading && (

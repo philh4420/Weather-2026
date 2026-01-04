@@ -11,11 +11,10 @@ interface WellnessDashboardProps {
 }
 
 const WellnessDashboard: React.FC<WellnessDashboardProps> = ({ wellnessData, pollenData }) => {
-  const cardClasses = 'border border-border dark:border-dark-border bg-card dark:bg-dark-card shadow-glass-light dark:shadow-glass-dark backdrop-blur-sm rounded-lg p-4';
   const secondaryText = 'text-secondary-text dark:text-dark-secondary-text';
 
   return (
-    <div className={cardClasses}>
+    <div>
        <h2 className={`text-sm font-semibold ${secondaryText} mb-4 text-center`}>Wellness Dashboard</h2>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <ActivityAdvisor advice={wellnessData.activity} />

@@ -20,9 +20,9 @@ const Atmosphere = ({ data }: { data: AtmosphereData }) => {
     const { humidity, pressure_mb, vis_km } = data;
 
     return (
-        <div className="h-full">
+        <div className="flex flex-col items-center h-full">
             <h2 className="text-lg font-medium mb-4">Atmosphere</h2>
-            <div className="flex justify-around items-start text-center">
+            <div className="flex justify-around items-start text-center w-full">
                 <div className="flex flex-col items-center">
                     <FiDroplet className="w-7 h-7 text-link-blue" />
                     <p className="text-xl font-bold mt-2">{humidity}<span className="text-sm font-medium">%</span></p>

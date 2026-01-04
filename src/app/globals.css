@@ -8,13 +8,16 @@
     -webkit-background-clip: text;
     color: transparent;
     animation: liquid-light-animation 4s linear infinite;
-    text-shadow: none;
-    background-image: linear-gradient(90deg, #111827, #6B7280, #111827);
+    /* Use a white gradient for high visibility in both light and dark modes */
+    background-image: linear-gradient(90deg, #FFFFFF, #E5E7EB, #FFFFFF);
+    /* Add a subtle drop shadow for better contrast in light mode */
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
   }
 
   .dark .liquid-light {
+    /* Override with a glowing shadow for dark mode */
     text-shadow: 0 0 8px rgba(255, 255, 255, 0.5);
-    background-image: linear-gradient(90deg, #FFFFFF, #E5E7EB, #FFFFFF);
+    /* The white background-image is inherited from the base .liquid-light class */
   }
 
   @keyframes liquid-light-animation {

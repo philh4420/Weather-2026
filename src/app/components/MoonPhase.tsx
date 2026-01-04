@@ -8,9 +8,9 @@ const MoonPhase = ({ astro }: { astro: any }) => {
     }
 
     return (
-        <div className="rounded-lg p-4 h-full">
+        <div className="flex flex-col items-center rounded-lg p-4 h-full">
             <h2 className="text-sm font-semibold text-secondary-text dark:text-dark-secondary-text mb-2">Moon Phase</h2>
-            <div className="flex items-center justify-between">
+            <div className="flex items-center justify-between w-full mt-2">
                 <div className="flex items-center space-x-3">
                     <TbMoon className="text-4xl" />
                     <div>

@@ -45,7 +45,7 @@ const getUvData = (uvValue: number) => {
 // Updated loading skeleton to match the new circular layout
 const UvIndexLoading = () => (
   <div className="flex flex-col items-center justify-between h-full text-center p-4">
-    <h2 className="text-sm font-semibold text-secondary-text dark:text-dark-secondary-text flex items-center self-start">
+    <h2 className="text-sm font-semibold text-secondary-text dark:text-dark-secondary-text flex items-center">
       <FiSun className="mr-2" />
       UV Index
     </h2>
@@ -76,7 +76,7 @@ const UvIndex = ({ uv }: UvIndexProps) => {
 
   return (
     <div className="flex flex-col items-center justify-between h-full text-center p-4">
-      <h2 className="text-sm font-semibold text-secondary-text dark:text-dark-secondary-text flex items-center self-start">
+      <h2 className="text-sm font-semibold text-secondary-text dark:text-dark-secondary-text flex items-center">
         <FiSun className="mr-2" />
         UV Index
       </h2>

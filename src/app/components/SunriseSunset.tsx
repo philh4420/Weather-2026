@@ -48,10 +48,11 @@ const SunriseSunset = ({ sunrise, sunset }: SunriseSunsetProps) => {
   };
 
   const statusMessage = getStatusMessage();
+  const secondaryText = 'text-secondary-text dark:text-dark-secondary-text';
 
   return (
     <div className="flex flex-col items-center justify-center h-full text-center py-2">
-        {/* Title is provided by parent component */}
+        <h2 className={`text-sm font-semibold ${secondaryText} mb-2`}>Sunrise & Sunset</h2>
       <div className="relative w-full max-w-[240px]">
         <svg viewBox="0 0 100 85" className="w-full h-auto overflow-visible">
           <defs>
